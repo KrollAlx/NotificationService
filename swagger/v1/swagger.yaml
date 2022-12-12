@@ -1,0 +1,74 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/clients":
+    post:
+      summary: Create client
+      tags:
+      - Clients
+      parameters: []
+      responses:
+        '201':
+          description: Client created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  type: string
+                operator_code:
+                  type: string
+                tag:
+                  type: string
+                timezone:
+                  type: string
+              required:
+              - phone_number
+              - operator_code
+              - tag
+              - taimezone
+  "/clients/{id}":
+    put:
+      summary: Update client
+      tags:
+      - Clients
+      parameters: []
+      responses:
+        '200':
+          description: Client updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  type: string
+                operator_code:
+                  type: string
+                tag:
+                  type: string
+                timezone:
+                  type: string
+              required:
+              - phone_number
+              - operator_code
+              - tag
+              - taimezone
+    delete:
+      summary: delete client
+      tags:
+      - Clients
+      responses:
+        '200':
+          description: Client deleted
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
