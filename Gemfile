@@ -3,6 +3,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.0"
 
+gem 'active_model_serializers', '~> 0.10.13'
+
+gem 'dry-validation', '~> 1.10'
+
+gem 'dry-monads'
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4"
 

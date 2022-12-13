@@ -20,16 +20,15 @@ RSpec.describe 'clients', type: :request do
       }
 
       response(201, 'Client created') do
-        # after do |example|
-        #   example.metadata[:response][:content] = {
-        #     'application/json' => {
-        #       example: JSON.parse(response.body, symbolize_names: true)
-        #     }
-        #   }
-        # end
-
         let(:client) {{phone_number: '79559999999', operator_code: '32', tag: 'first client', timezone: 'Moscow'}}
-        run_test!
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data['phone_number']).to eq('79559999999')
+          expect(data['operator_code']).to eq('32')
+          expect(data['tag']).to eq('first client')
+          expect(data['timezone']).to eq('Moscow')
+        end
       end
 
       response(422, 'Invalid request') do
@@ -58,13 +57,13 @@ RSpec.describe 'clients', type: :request do
       }
 
       response(200, 'Client updated') do
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
+        # after do |example|
+        #   example.metadata[:response][:content] = {
+        #     'application/json' => {
+        #       example: JSON.parse(response.body, symbolize_names: true)
+        #     }
+        #   }
+        # end
         run_test!
       end
     end
@@ -79,13 +78,13 @@ RSpec.describe 'clients', type: :request do
 
       response(200, 'Client deleted') do
 
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
+        # after do |example|
+        #   example.metadata[:response][:content] = {
+        #     'application/json' => {
+        #       example: JSON.parse(response.body, symbolize_names: true)
+        #     }
+        #   }
+        # end
         run_test!
       end
     end
