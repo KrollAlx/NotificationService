@@ -16,7 +16,7 @@ RSpec.describe 'clients', type: :request do
           tag: { type: :string },
           timezone: { type: :string }
         },
-        required: [ 'phone_number', 'operator_code', 'tag', 'taimezone' ]
+        required: [ 'phone_number', 'operator_code', 'tag', 'timezone' ]
       }
 
       response(201, 'Client created') do
@@ -53,17 +53,31 @@ RSpec.describe 'clients', type: :request do
           tag: { type: :string },
           timezone: { type: :string }
         },
-        required: [ 'phone_number', 'operator_code', 'tag', 'taimezone' ]
+        required: [ 'phone_number', 'operator_code', 'tag', 'timezone' ]
       }
 
       response(200, 'Client updated') do
-        # after do |example|
-        #   example.metadata[:response][:content] = {
-        #     'application/json' => {
-        #       example: JSON.parse(response.body, symbolize_names: true)
-        #     }
-        #   }
-        # end
+        let(:id) { Client.create(phone_number: '79559999999', operator_code: '32', tag: 'first client', timezone: 'Moscow').id}
+        let(:client) { { phone_number: '79555555555', operator_code: '79', tag: 'updated client', timezone: 'Moscow'}}
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data['phone_number']).to eq('79555555555')
+          expect(data['operator_code']).to eq('79')
+          expect(data['tag']).to eq('updated client')
+          expect(data['timezone']).to eq('Moscow')
+        end
+      end
+
+      response(404, 'Client not found') do
+        let(:id) { '-1' }
+        let(:client) { { phone_number: '79559999999', operator_code: '32', tag: 'first client', timezone: 'Moscow'}}
+        run_test!
+      end
+
+      response(422, 'Invalid request') do
+        let(:id) { Client.create(phone_number: '79559999999', operator_code: '32', tag: 'first client', timezone: 'Moscow').id}
+        let(:client) { { phone_number: '795b99a9999', operator_code: '32', tag: 'first client', timezone: 'Moscow'}}
         run_test!
       end
     end
