@@ -70,7 +70,7 @@ RSpec.describe 'clients', type: :request do
       end
 
       response(404, 'Client not found') do
-        let(:id) { '-1' }
+        let(:id) { -1 }
         let(:client) { { phone_number: '79559999999', operator_code: '32', tag: 'first client', timezone: 'Moscow'}}
         run_test!
       end
@@ -85,20 +85,18 @@ RSpec.describe 'clients', type: :request do
 
   path '/clients/{id}' do
 
-    delete 'delete client' do
+    delete 'Delete client' do
       tags 'Clients'
-      produces 'application/json'
       parameter name: :id, in: :path, type: :string
+      produces 'application/json'
 
       response(200, 'Client deleted') do
+        let(:id) { Client.create(phone_number: '79559999999', operator_code: '32', tag: 'first client', timezone: 'Moscow').id}
+        run_test!
+      end
 
-        # after do |example|
-        #   example.metadata[:response][:content] = {
-        #     'application/json' => {
-        #       example: JSON.parse(response.body, symbolize_names: true)
-        #     }
-        #   }
-        # end
+      response(404, 'Client not found') do
+        let(:id) { -1 }
         run_test!
       end
     end

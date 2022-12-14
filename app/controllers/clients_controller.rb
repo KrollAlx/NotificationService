@@ -24,5 +24,11 @@ class ClientsController < ApplicationController
   end
 
   def delete
+    result = DeleteClient.call(params)
+    if result.success?
+      render json: result.success, status: :ok
+    else
+      render json: result.failure, status: :not_found
+    end
   end
 end
