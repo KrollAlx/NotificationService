@@ -6,22 +6,39 @@ RSpec.describe 'notifications', type: :request do
     post 'Create notification' do
       tags 'Notifications'
       consumes 'application/json'
-      parameter name: :blog, in: :body, schema: {
+      produces 'application/json'
+      parameter name: :notification, in: :body, schema: {
         type: :object,
         properties: {
-          title: { type: :string },
-          content: { type: :string }
+          start_at: { type: :string },
+          text: { type: :string },
+          filter: { type: :string },
+          end_at: { type: :string }
         },
-        required: [ 'title', 'content' ]
+        required: [ 'start_at', 'text', 'filter', 'end_at' ]
       }
 
-      response '201', 'blog created' do
-        let(:blog) { { title: 'foo', content: 'bar' } }
-        run_test!
+      response '201', 'Notification created' do
+        start_notification = DateTime.now.to_s
+        end_notification = (DateTime.now + 1.days).to_s
+
+        let(:notification) { { start_at: start_notification, end_at: end_notification,
+                               filter: '32', text: 'Hello world!'} }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data['start_at'].to_datetime.localtime).to eq(start_notification.to_datetime)
+          expect(data['end_at'].to_datetime.localtime).to eq(end_notification.to_datetime)
+          expect(data['filter']).to eq('32')
+          expect(data['text']).to eq('Hello world!')
+        end
       end
 
       response '422', 'invalid request' do
-        let(:blog) { { title: 'foo' } }
+        start_notification = DateTime.now.to_s
+
+        let(:notification) { { start_at: start_notification, end_at: "",
+                               filter: '32', text: 'Hello world!'} }
         run_test!
       end
     end
