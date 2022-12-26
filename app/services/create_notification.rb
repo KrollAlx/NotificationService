@@ -23,7 +23,7 @@ class CreateNotification
       # бизнес логика запуска рассылки
 
       if correct_time?(notification)
-        # NotificationJob.perform_at(notification.start_at.to_datetime, notification)
+        NotificationJob.perform_at(notification.start_at.to_datetime, notification.id)
       end
 
       Success(notification)
