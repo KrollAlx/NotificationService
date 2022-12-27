@@ -1,24 +1,33 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Данное приложение представляет собой REST API для администрирования рассылками
+и получения статистики. 
+После создания рассылки, приложение выбирает всех клиентов подходящих под значение
+филтра и обращается к стороннему API, которое отправляет сообщения
+клиентам. Рассылка запускается как бекграуд джоба. Также сделана swagger документация.
 
-Things you may want to cover:
+Возможности:
 
-* Ruby version
+* Создание, обновление, удаления клиента 
 
-* System dependencies
+* Создание, обновления, удаления рассылки
 
-* Configuration
+* Получение статистики по всем рассылкам, получение статистики по конкретной рассылке
 
-* Database creation
+Стек:
 
-* Database initialization
+* Ruby 3
 
-* How to run the test suite
+* Ruby on Rails 7
 
-* Services (job queues, cache servers, search engines, etc.)
+* PostgreSQL
 
-* Deployment instructions
+* RSpec
 
-* ...
+* RSwag
+
+* Sidekiq
+
+* Dry-monads
+
+* Dry-validation
