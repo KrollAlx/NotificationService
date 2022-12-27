@@ -10,7 +10,9 @@ class NotificationsController < ApplicationController
   end
 
   def statistics
-
+    result = GetStatistics.call
+    notifications = result.success
+    render json: notifications, status: :ok
   end
 
   def details

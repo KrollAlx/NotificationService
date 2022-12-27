@@ -11,8 +11,8 @@ class NotificationJob
     auth_token = ENV.fetch("TOKEN")
 
     clients.each do |client|
-      message = Message.create(created_at: DateTime.now, notification: notification, client: client)
       begin
+        message = Message.create(created_at: DateTime.now, notification: notification, client: client, status: 0)
         response = RestClient.post(send_service_url + message.id,
                                    {id: message.id.to_i,
                                     phone: client.phone_number.to_i,

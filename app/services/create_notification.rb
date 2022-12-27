@@ -20,10 +20,8 @@ class CreateNotification
                                          text: params[:text],
                                          filter: params[:filter])
 
-      # бизнес логика запуска рассылки
-
       if correct_time?(notification)
-        NotificationJob.perform_at(notification.start_at.to_datetime, notification.id)
+        # NotificationJob.perform_at(notification.start_at.to_datetime, notification.id)
       end
 
       Success(notification)

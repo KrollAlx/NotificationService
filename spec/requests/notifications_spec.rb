@@ -19,8 +19,8 @@ RSpec.describe 'notifications', type: :request do
       }
 
       response '201', 'Notification created' do
-        start_notification = DateTime.now.to_s
-        end_notification = (DateTime.now + 1.days).to_s
+        start_notification = (DateTime.now - 1.days).to_s
+        end_notification = (DateTime.now - 2.days).to_s
 
         let(:notification) { { start_at: start_notification, end_at: end_notification,
                                filter: '32', text: 'Hello world!'} }
@@ -34,12 +34,38 @@ RSpec.describe 'notifications', type: :request do
         end
       end
 
-      response '422', 'invalid request' do
+      response '422', 'Invalid request' do
         start_notification = DateTime.now.to_s
 
-        let(:notification) { { start_at: start_notification, end_at: "",
+        let(:notification) { { start_at: start_notification, end_at: '',
                                filter: '32', text: 'Hello world!'} }
         run_test!
+      end
+    end
+  end
+
+  path '/notifications/statistics' do
+
+    get 'Get statistics' do
+      tags 'Notifications'
+      produces 'application/json'
+
+      response '200', 'OK' do
+        start_notification = (DateTime.now - 1).to_s
+        end_notification = (DateTime.now - 2.days).to_s
+
+        Client.create(phone_number: '79559999999', operator_code: '32', tag: 'first client', timezone: 'Moscow')
+        Client.create(phone_number: '79559999944', operator_code: '32', tag: 'second client', timezone: 'Moscow')
+
+        CreateNotification.call({ start_at: start_notification, end_at: end_notification,
+                                                filter: '32', text: 'Hello world!'}).success
+
+        run_test! do |response|
+          data = JSON.parse(response.body)[0]
+          expect(data['filter']).to eq('32')
+          expect(data['text']).to eq('Hello world!')
+          expect(data['messages']).to eq([])
+        end
       end
     end
   end
