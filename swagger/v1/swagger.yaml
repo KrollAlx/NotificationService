@@ -72,7 +72,7 @@ paths:
               - tag
               - timezone
     delete:
-      summary: delete client
+      summary: Delete client
       tags:
       - Clients
       parameters:
@@ -86,6 +86,110 @@ paths:
           description: Client deleted
         '404':
           description: Client not found
+  "/notifications":
+    post:
+      summary: Create notification
+      tags:
+      - Notifications
+      parameters: []
+      responses:
+        '201':
+          description: Notification created
+        '422':
+          description: Invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_at:
+                  type: string
+                text:
+                  type: string
+                filter:
+                  type: string
+                end_at:
+                  type: string
+              required:
+              - start_at
+              - text
+              - filter
+              - end_at
+  "/notifications/{id}":
+    put:
+      summary: Update notification
+      tags:
+      - Notifications
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Notification updated
+        '422':
+          description: Invalid request
+        '404':
+          description: Notification not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_at:
+                  type: string
+                text:
+                  type: string
+                filter:
+                  type: string
+                end_at:
+                  type: string
+              required:
+              - start_at
+              - text
+              - filter
+              - end_at
+    delete:
+      summary: Delete notification
+      tags:
+      - Notifications
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Notification deleted
+        '404':
+          description: Notification not found
+  "/notifications/statistics":
+    get:
+      summary: Get statistics
+      tags:
+      - Notifications
+      responses:
+        '200':
+          description: OK
+  "/notifications/{id}/statistics":
+    get:
+      summary: Get notification details
+      tags:
+      - Notifications
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
 servers:
 - url: https://{defaultHost}
   variables:
