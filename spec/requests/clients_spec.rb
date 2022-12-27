@@ -81,9 +81,6 @@ RSpec.describe 'clients', type: :request do
         run_test!
       end
     end
-  end
-
-  path '/clients/{id}' do
 
     delete 'Delete client' do
       tags 'Clients'
